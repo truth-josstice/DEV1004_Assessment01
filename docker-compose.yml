@@ -36,6 +36,8 @@ services:
     container_name: frontend
     ports:
       - "80:80" # Exposes container port 80 on host port 80
+    environment:
+      - VITE_API_URL=http://backend:3000
     depends_on:
       - backend # Ensures backend starts first, but does not wait for it to be ready
     networks:

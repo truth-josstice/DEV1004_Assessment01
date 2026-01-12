@@ -48,9 +48,12 @@ jobs:
         run: |
           cd backend
           echo "Running tests with env: NODE_ENV=$NODE_ENV"
-          npx jest --testPathIgnorePatterns="server.test.js" --testTimeout=30000
+          npx jest --testPathIgnorePatterns="src/__tests__/setup/|server.test.js" --testTimeout=30000
+          echo "✅ Core tests passed"
 
       - name: Run Integration Tests (Optional - Can Fail)
+        env:
+          NODE_OPTIONS: "--experimental-vm-modules --no-warnings=ExperimentalWarning"
         if: always()
         continue-on-error: true
         run: |

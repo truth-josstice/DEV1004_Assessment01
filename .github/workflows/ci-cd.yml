@@ -48,7 +48,7 @@ jobs:
         run: |
           cd backend
           echo "Running tests with env: NODE_ENV=$NODE_ENV"
-          npx jest --testPathIgnorePatterns="src/__tests__/setup/|server.test.js" --testTimeout=30000
+          npx jest --testPathIgnorePatterns="src/__tests__/setup/|server.test.js" --testTimeout=30000 --silent
           echo "✅ Core tests passed"
 
       - name: Run Integration Tests (Optional - Can Fail)
@@ -59,7 +59,7 @@ jobs:
         run: |
           cd backend
           echo "Running integration tests..."
-          npx jest server.test.js --testTimeout=60000 --forceExit || echo "⚠️ Integration tests may fail in CI environment"
+          npx jest server.test.js --testTimeout=60000 --silent --forceExit || echo "⚠️ Integration tests may fail in CI environment"
 
       # Set up Node.js environment for frontend
       - name: Setup Node.js for Frontend
@@ -88,20 +88,22 @@ jobs:
 
       # Push images to DockerHub
       - name: Push to Docker Hub
-        if: github.event_name == 'push' && github.reg == 'refs/head/main'
+        # Only push images to Docker Hub when pushed directly or PR is merged to main, or manually activated with workflow_dispatch
+        if: |
+          github.event_name == 'push' && github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
         run: |
           # Log in to Docker Hub using GitHub Secrets
           echo "Logging into Docker Hub..."
           echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
-        
+
           echo "Tagging images..."
-          
+
           # Tag with sha and latest (SHA last forever, latest is overwritten)
           docker tag backend:${{ github.sha }} ${{ secrets.DOCKERHUB_USERNAME }}/dev1004-backend:${{ github.sha }}
           docker tag backend:${{ github.sha }} ${{ secrets.DOCKERHUB_USERNAME }}/dev1004-backend:latest
           docker tag frontend:${{ github.sha }} ${{ secrets.DOCKERHUB_USERNAME }}/dev1004-frontend:${{ github.sha }}
           docker tag frontend:${{ github.sha }} ${{ secrets.DOCKERHUB_USERNAME }}/dev1004-frontend:latest
-          
+
           echo "Pushing images to Docker Hub..."
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/dev1004-backend:${{ github.sha }}
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/dev1004-backend:latest

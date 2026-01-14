@@ -61,7 +61,5 @@ const validateReelProgress = (request, response, next) => {
 
 export { validateUserRegistration, validateLogin, validateReelProgress };
 
-const spellingmisstakes = "jere aure summm miszpeld werds dood mowr speeeeellin mustooks"
-const anutherMisspeling = "therre aar moor of thees";
-const test = "accomodation alot definately seperate";
-const test2 = "color theater canceled";  // UK locale should flag these
+// const test = "accomodation alot definately seperate";
+// const test2 = "color theater canceled";  // UK locale should flag these

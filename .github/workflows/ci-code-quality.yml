@@ -31,7 +31,9 @@ jobs:
 
       # Run linter with local ruleset
       - name: Backend ESLint Quality Check
-        run: npm run lint -- --max-warnings 0 --format=stylish
+        run: |
+          cd backend
+          npm run lint -- --max-warnings 0 --format=stylish
 
       # Setup Node.js environment for frontend
       - name: Frontend Node.js Setup
@@ -49,7 +51,9 @@ jobs:
 
       # Run linter with local ruleset
       - name: Frontend ESLint Quality Check
-        run: npm run lint -- --max-warnings 0 --format=stylish
+        run: |
+          cd frontend
+          npm run lint -- --max-warnings 0 --format=stylish
 
       # Australian English Spell Check
       - name: Spell Check with PR Comments

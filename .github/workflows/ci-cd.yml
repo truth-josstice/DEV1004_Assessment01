@@ -1,10 +1,14 @@
 name: CI/CD Pipeline
 # Run this workflow on push and pull requests, and add manual workflow triggers
-on: [push, pull_request, workflow_dispatch]
-# Allow package write permission to push images to GHCR
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+# Explicitly stated permissions are clearer
 permissions:
   contents: read
-  packages: write
 
 jobs:
   # Test code passes all existing tests

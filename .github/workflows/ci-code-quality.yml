@@ -59,7 +59,7 @@ jobs:
       - name: Spell Check with PR Comments
         uses: reviewdog/action-misspell@v1.27.0
         with:
-          locale: "EN"
+          locale: "UK"
           level: "warning"
           reporter: "github-pr-review"
           filter_mode: "added"
